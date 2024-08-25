@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BMI Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg-color-light: #f7f7f7;
+            --bg-color-dark: #0c0b0b;
+            --text-color-light: #141313;
+            --text-color-dark: #f7f7f7;
+            --border-color-light: #ddd;
+            --border-color-dark: #151414;
+            --button-bg-light: #4CAF50;
+            --button-bg-dark: #3e8e41;
+            --button-hover-light: #3e8e41;
+            --button-hover-dark: #2e7d32;
+            --result-text-light: #121111;
+            --result-text-dark: #f7f7f7;
+        }
+
+        body {
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: var(--bg-color-light);
+            border-bottom: 1px solid var(--border-color-light);
+            transition: background-color 0.3s ease;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .header .icon:hover {
+            transform: scale(1.2);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid var(--border-color-light);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .input-field {
+            margin-bottom: 15px;
+            width: 110%;
+        }
+
+        .input-field label {
+            font-size: 1em;
+            margin-bottom: 5px;
+            display: block;
+            color: var(--text-color-light);
+        }
+
+        .input-field input[type="text"], .input-field input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .input-field input[type="text"]:focus, .input-field input[type="number"]:focus {
+            border-color: #aaa;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .result.normal {
+            color: var(--result-text-light);
+        }
+
+        .result.obese {
+            color: red;
+        }
+
+        .created-by {
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        button[type="button"] {
+            background-color: var(--button-bg-light);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin: 5px;
+        }
+
+        button[type="button"]:hover {
+            background-color: var(--button-hover-light);
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-dark);
+        }
+
+        body.dark-mode .header {
+            background-color: var(--bg-color-dark);
+            border-color: var(--border-color-dark);
+        }
+
+        body.dark-mode .container {
+            background-color: #161515;
+            border-color: var(--border-color-dark);
+        }
+
+        body.dark-mode .input-field label {
+            color: var(--text-color-dark);
+        }
+
+        body.dark-mode .result.normal {
+            color: var(--result-text-dark);
+        }
+
+        body.dark-mode button[type="button"] {
+            background-color: var(--button-bg-dark);
+        }
+
+        body.dark-mode button[type="button"]:hover {
+            background-color: var(--button-hover-dark);
+        }
+
+        /* Media queries for responsiveness */
+        @media only screen and (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.2em;
+            }
+
+            .input-field {
+                margin-bottom: 10px;
+            }
+
+            .input-field label {
+                font-size: 0.9em;
+            }
+
+            .input-field input[type="text"], .input-field input[type="number"] {
+                font-size: 0.9em;
+            }
+
+            button[type="button"] {
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <i id="mode-icon" class="fas fa-sun icon" style="font-size: 20px;" onclick="toggleMode()"></i>
+    </div>
+    
+    <div class="container">
+    
+        <form>
+            <h2>Calculate Your BMI</h2>
+
+            <div class="input-field">
+                <input type="text" id="height" name="height" placeholder="Enter Your height">
+            </div>
+            <div class="input-field">
+                <input type="number" id="weight" name="weight" placeholder="Enter Your Weight">
+            </div>
+            <button type="button" onclick="calculateBMI()">Calculate BMI</button>
+            <button type="button" onclick="resetFields()">Reset</button>
+            <div id="error" class="error"></div>
+            <div id="result" class="result"></div>
+        </form>
+        <p class="created-by">This Website is Created By Tavish</p>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            const heightInput = document.getElementById("height").value;
+            const weightInput = document.getElementById("weight").value;
+            let heightFeet, heightInches;
+            if (heightInput === "" || weightInput === "") {
+              document.getElementById("error").innerHTML = " Both height and weight fields must be filled.";
+              return;
+         }
+
+            // Parse height input
+            if (heightInput.includes("'")) {
+                const parts = heightInput.split("'");
+                heightFeet = parseInt(parts[0]);
+                heightInches = parseInt(parts[1].trim());
+            } else if (heightInput.includes("ft")) {
+                const parts = heightInput.split("ft");
+                heightFeet = parseInt(parts[0]);
+                if (parts[1]) {
+                    heightInches = parseInt(parts[1].trim().replace("in", ""));
+                } else {
+                    heightInches = 0;
+                }
+            } else {
+                heightFeet = parseInt(heightInput);
+                heightInches = 0;
+            }
+
+            // Check for invalid height input
+            if (heightFeet > 13) {
+                document.getElementById("error").innerHTML = "Error: Height cannot be more than 13 feet";
+                return;
+            }
+
+            // Calculate BMI
+            const heightInMeters = (heightFeet * 0.3048) + (heightInches * 0.0254);
+            const bmi = weightInput / (heightInMeters * heightInMeters);
+
+            // Determine BMI category
+            let category;
+            if (bmi < 18.5) {
+                category = "Underweight";
+            } else if (bmi < 25) {
+                category = "Normal";
+            } else if (bmi < 30) {
+                category = "Overweight";
+            } else {
+                category = "Obese";
+            }
+
+            // Calculate weight to reach normal category
+            let weightToReachNormal;
+            let resultText;
+            if (category === "Underweight") {
+                weightToReachNormal = (18.5 * heightInMeters * heightInMeters) - weightInput;
+                resultText = `Your BMI is ${bmi.toFixed(2)} (${category}).<br/> You need to gain ${weightToReachNormal.toFixed(2)} kg to reach a normal weight.`;
+            } else if (category === "Overweight" || category === "Obese") {
+                weightToReachNormal = weightInput - (25 * heightInMeters * heightInMeters);
+                resultText = `Your BMI is ${bmi.toFixed(2)} (${category}). You need to lose ${Math.abs(weightToReachNormal).toFixed(2)} kg to reach a normal weight.`;
+            } else {
+                resultText = `Your BMI is ${bmi.toFixed(2)} (${category}). You are within a normal weight range.`;
+            }
+
+            const resultElement = document.getElementById("result");
+            resultElement.innerHTML = resultText;
+            if (category === "Obese") {
+                resultElement.className = "result obese";
+            } else {
+                resultElement.className = "result normal";
+            }
+        }
+
+        function resetFields() {
+            document.getElementById("height").value = "";
+            document.getElementById("weight").value = "";
+            document.getElementById("error").innerHTML = "";
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("result").className = "result";
+        }
+
+        function toggleMode() {
+            const body = document.body;
+            const icon = document.getElementById("mode-icon");
+            body.classList.toggle("dark-mode");
+
+            if (body.classList.contains("dark-mode")) {
+                icon.classList.remove("fa-sun");
+                icon.classList.add("fa-moon");
+            } else {
+                icon.classList.remove("fa-moon");
+                icon.classList.add("fa-sun");
+            }
+        }
+    </script>
+</body>
+</html>
