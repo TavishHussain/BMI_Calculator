@@ -4,7 +4,7 @@
     <title>BMI Calculator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/256/10481/10481308.png" type="image">
+    <link rel="shortcut icon" href="my.jpg" type="image">
    <style>
         :root {
             --bg-color-light: #f7f7f7;
@@ -176,7 +176,8 @@
         /* Media queries for responsiveness */
         @media only screen and (max-width: 768px) {
             .container {
-                margin: 10px;
+                width: 90%;
+                margin: 20px;
                 padding: 15px;
             }
 
@@ -238,6 +239,10 @@
               document.getElementById("error").innerHTML = " Both height and weight fields must be filled.";
               return;
          }
+         if (weightInput > 600) {
+        document.getElementById("error").innerHTML = "Enter correct weight.";
+        return;
+    }
 
             // Parse height input
             if (heightInput.includes("'")) {
